@@ -27,5 +27,4 @@ $(call inherit-product, $(SRC_TARGET_DIR)/product/telephony_product.mk)
 $(call inherit-product, frameworks/base/data/sounds/AllAudio.mk)
 
 PRODUCT_PACKAGES += \
-    PhotoTable \
     WallpaperPicker \
