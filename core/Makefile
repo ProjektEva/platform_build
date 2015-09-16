@@ -3459,7 +3459,7 @@ endif
 # host tools needed to build dist and OTA packages
 
 ifeq ($(BUILD_OS),darwin)
-  build_ota_package := false
+  build_ota_package := true
   build_otatools_package := false
 else
   # set build_ota_package, and allow opt-out below
