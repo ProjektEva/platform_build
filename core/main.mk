@@ -363,7 +363,7 @@ ADDITIONAL_BUILD_PROPERTIES += net.bt.name=Android
 
 # ------------------------------------------------------------
 # Include vendor specific additions to build properties
--include vendor/statix/build/core/props.mk
+-include vendor/eva/build/core/props.mk
 
 # ------------------------------------------------------------
 # Define a function that, given a list of module tags, returns
