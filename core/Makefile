@@ -1,4 +1,13 @@
 # Put some miscellaneous rules here
+#
+# Build system colors
+#
+# PFX: Prefix "target C++:" in yellow
+# INS: Module "Install:" output color (cyan for ics)
+
+ifneq ($(BUILD_WITH_COLORS),0)
+    include $(TOP_DIR)build/core/colors.mk
+endif
 
 # HACK: clear LOCAL_PATH from including last build target before calling
 # intermedites-dir-for
@@ -3026,7 +3035,7 @@ endif
 ifeq ($(WITH_GMS),true)
     $(INTERNAL_OTA_PACKAGE_TARGET): backuptool := false
 else
-ifneq ($(GZOSP_BUILD),)
+ifneq ($(EVA_BUILD),)
     $(INTERNAL_OTA_PACKAGE_TARGET): backuptool := true
 else
     $(INTERNAL_OTA_PACKAGE_TARGET): backuptool := false
@@ -3046,8 +3055,15 @@ $(INTERNAL_OTA_PACKAGE_TARGET): $(BUILT_TARGET_FILES_PACKAGE) \
 	   $(if $(OEM_OTA_CONFIG), -o $(OEM_OTA_CONFIG)) \
 	   $(BUILT_TARGET_FILES_PACKAGE) $@
 
-.PHONY: otapackage
+EVA_TARGET_PACKAGE := $(PRODUCT_OUT)/$(EVA_VERSION).zip
+
+.PHONY: otapackage eva
 otapackage: $(INTERNAL_OTA_PACKAGE_TARGET)
+eva: otapackage
+	$(hide) ln -f $(INTERNAL_OTA_PACKAGE_TARGET) $(EVA_TARGET_PACKAGE)
+	$(hide) $(MD5SUM) $(EVA_TARGET_PACKAGE) > $(EVA_TARGET_PACKAGE).md5sum
+	@echo -e ${CL_RED}"  .::Projekt Eva::.  "${CL_RED}
+	@echo -e "Package complete: $(EVA_TARGET_PACKAGE)"
 
 endif    # build_ota_package
 
