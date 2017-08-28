@@ -601,6 +601,7 @@ function print_lunch_menu()
 function lunch()
 {
     local answer
+    LUNCH_MENU_CHOICES=($(for l in ${LUNCH_MENU_CHOICES[@]}; do echo "$l"; done | sort))
 
     if [ "$1" ] ; then
         answer=$1
@@ -628,30 +629,21 @@ function lunch()
                 selection=${choices[$(($answer-1))]}
             fi
         fi
-    else
+    elif (echo -n $answer | grep -q -e "^[^\-][^\-]*-[^\-][^\-]*$")
+    then
         selection=$answer
+    fi
+
+    if [ -z "$selection" ]
+    then
+        echo
+        echo "Invalid lunch combo: $answer"
+        return 1
     fi
 
     export TARGET_BUILD_APPS=
 
-    local product variant_and_version variant version
-
-    product=${selection%%-*} # Trim everything after first dash
-    variant_and_version=${selection#*-} # Trim everything up to first dash
-    if [ "$variant_and_version" != "$selection" ]; then
-        variant=${variant_and_version%%-*}
-        if [ "$variant" != "$variant_and_version" ]; then
-            version=${variant_and_version#*-}
-        fi
-    fi
-
-    if [ -z "$product" ]
-    then
-        echo
-        echo "Invalid lunch combo: $selection"
-        return 1
-    fi
-
+    local product=${selection%%-*} # Trim everything after first dash
     check_product $product
 
     TARGET_PRODUCT=$product \
@@ -660,13 +652,30 @@ function lunch()
     build_build_var_cache
     if [ $? -ne 0 ]
     then
+        echo
+        echo "** Don't have a product spec for: '$product'"
+        product=
+    fi
+
+    local variant_and_version variant version
+    variant_and_version=${selection#*-} # Trim everything up to first dash
+    if [ "$variant_and_version" != "$selection" ]; then
+        variant=${variant_and_version%%-*}
+        if [ "$variant" != "$variant_and_version" ]; then
+            version=${variant_and_version#*-}
+        fi
+    fi
+
+    if [ -z "$product" -o -z "$variant" ]
+    then
+        echo
         return 1
     fi
 
-    export TARGET_PRODUCT=$(get_build_var TARGET_PRODUCT)
-    export TARGET_BUILD_VARIANT=$(get_build_var TARGET_BUILD_VARIANT)
+    export TARGET_PRODUCT=$product
+    export TARGET_BUILD_VARIANT=$variant
     if [ -n "$version" ]; then
-      export TARGET_PLATFORM_VERSION=$(get_build_var TARGET_PLATFORM_VERSION)
+      export TARGET_PLATFORM_VERSION=$version
     else
       unset TARGET_PLATFORM_VERSION
     fi
