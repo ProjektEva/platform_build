@@ -992,7 +992,7 @@ else if get_stage("%(bcb_dev)s") == "3/3" then
                              progress=progress_dict.get(block_diff.partition),
                              write_verify_script=OPTIONS.verify)
 
-  AddCompatibilityArchiveIfTrebleEnabled(input_zip, output_zip, target_info)
+  # AddCompatibilityArchiveIfTrebleEnabled(input_zip, output_zip, target_info)
 
   boot_img = common.GetBootableImage(
       "boot.img", "boot.img", OPTIONS.input_tmp, "BOOT")
