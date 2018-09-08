@@ -940,6 +940,9 @@ else if get_stage("%(bcb_dev)s") == "3/3" then
     script.Unmount("/system")
 
   system_progress = 0.75
+  script.Print("***************************************************");
+  script.Print("*                  Projekt Eva                    *");
+  script.Print("***************************************************");
 
   if OPTIONS.wipe_user_data:
     system_progress -= 0.1
