@@ -70,9 +70,7 @@ PRODUCT_EXTRA_VNDK_VERSIONS := 28
 
 # More AOSP packages
 PRODUCT_PACKAGES += \
-    messaging \
-    WAPPushManager \
-    WallpaperPicker \
+    WAPPushManager
 
 # NFC:
 #   Provide a libnfc-nci.conf to GSI product
