@@ -29,6 +29,7 @@ PRODUCT_PACKAGES += \
     drmserver \
     ethernet-service \
     fsck.f2fs \
+    HTMLViewer \
     libfilterpack_imageproc \
     libwebviewchromium_loader \
     libwebviewchromium_plat_support \
